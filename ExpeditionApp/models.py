@@ -7,6 +7,7 @@ class Expedition(models.Model):
     ville_depart = models.CharField(max_length=100)
     ville_arrivee = models.CharField(max_length=100)
     poids = models.DecimalField(max_digits=10, decimal_places=2)
+    
     date_souhaitee = models.DateField()
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, 
@@ -22,6 +23,4 @@ class Expedition(models.Model):
         Entreprise,
         on_delete=models.CASCADE,
         related_name='entreprises',
-        blank=True,
-        null=True,
     )

@@ -13,19 +13,16 @@ class Offre(models.Model):
     Entreprise = models.ForeignKey(
         Entreprise, on_delete=models.CASCADE,
         related_name='entreprises_offres',
-        blank=True,
-        null=True,)
+        )
 
     Vehicule = models.ForeignKey(
         'VehiculeApp.Vehicule', on_delete=models.CASCADE,
         related_name='vehicules_offres',
-        blank=True,
-        null=True,)
+        )
 
     expedition = models.ForeignKey(
         'ExpeditionApp.Expedition', on_delete=models.CASCADE,
         related_name='expeditions_offres',
-        blank=True,     
-    null=True,)
+        )
 
     
