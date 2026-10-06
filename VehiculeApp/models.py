@@ -2,6 +2,7 @@ from django.db import models
 from EntrepriseApp.models import Entreprise
 from django.core.validators import MinValueValidator
 
+
 # Create your models here.
 class Vehicule(models.Model):
     immatriculation = models.CharField(max_length=20, unique=True)
@@ -22,3 +23,4 @@ class Vehicule(models.Model):
         'OffreApp.Offre', on_delete=models.CASCADE,
         related_name='offres_vehicules',
         )
+    

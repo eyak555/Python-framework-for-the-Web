@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.core.validators import MaxLengthValidator, RegexValidator
+from django.utils import timezone
 # Create your models here.
 
 
@@ -28,6 +30,34 @@ class utilisateur(AbstractUser):
     ], default='C')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def generate_user_id(cls):
+        annee = timezone.now().strftime('%y')
+        prefixe = f"{annee}user"
+
+        dernier = (
+            cls.objects
+            .filter(user_id__startswith=prefixe)
+            .order_by('user_id')
+            .last()
+        )
+
+        compteur = (
+            int(dernier.user_id[-2:]) + 1 if dernier
+            else 0
+        )
+
+        if compteur > 99:
+            raise ValidationError("Limite de 99 user.")
+
+        return f"{prefixe}{compteur:02d}"
+
+    def save(self, *args, **kwargs):
+        if not self.user_id:
+            self.user_id = self.generate_user_id()
+
+        super().save(*args, **kwargs)
 
 
 
