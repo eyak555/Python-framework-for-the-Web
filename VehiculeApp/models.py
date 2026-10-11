@@ -1,7 +1,7 @@
 from django.db import models
 from EntrepriseApp.models import Entreprise
 from django.core.validators import MinValueValidator
-
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Vehicule(models.Model):
@@ -23,4 +23,15 @@ class Vehicule(models.Model):
         'OffreApp.Offre', on_delete=models.CASCADE,
         related_name='offres_vehicules',
         )
-    
+
+    def clean(self):
+        super().clean()
+
+        if self.Entreprise_id and self.Entreprise.type_entreprise != 'T':
+            raise ValidationError({
+                'Entreprise': 'L’entreprise doit être de type transporteur.'
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)

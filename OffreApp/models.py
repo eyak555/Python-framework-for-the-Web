@@ -1,6 +1,7 @@
 from django.db import models
 from EntrepriseApp.models import Entreprise
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Offre(models.Model):
@@ -32,4 +33,22 @@ class Offre(models.Model):
         related_name='expeditions_offres',
         )
 
+    def clean(self):
+        super().clean()
+
+        if self.Entreprise_id and self.Entreprise.type_entreprise != 'T':
+            raise ValidationError({
+                'Entreprise': 'Une offre ne peut être créée que par transporteur.'
+            })
+
+        if self.expedition_id and self.expedition.status != 'publiee':
+            raise ValidationError({
+                'expedition': (
+                    'Une offre ne peut être créée que pour une expédition publiée.'
+                )
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
     

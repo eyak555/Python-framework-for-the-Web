@@ -15,6 +15,7 @@ class Expedition(models.Model):
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, 
     choices=[('en_attente', 'En attente'),
+                ('publiee', 'Publiée'),
                 ('en_cours', 'En cours'),   
                 ('terminee', 'Terminée'),
                 ('annulee', 'Annulée'),     
