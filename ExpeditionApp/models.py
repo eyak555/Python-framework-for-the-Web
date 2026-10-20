@@ -62,7 +62,10 @@ class Expedition(models.Model):
             self.reference = self.generate_reference()
 
         #fct appele pour appliquer les validateurs
-        self.full.clean() #valide les champs avant de sauvegarder
+        self.full_clean() #valide les champs avant de sauvegarder
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.reference} - {self.ville_depart} to {self.ville_arrivee}"
         
         

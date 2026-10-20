@@ -78,5 +78,7 @@ class Entreprise(models.Model):
 
     gerant = models.OneToOneField(utilisateur, on_delete=models.CASCADE, 
     related_name='entreprise')
+    def __str__(self):
+        return self.raison_sociale
        
   

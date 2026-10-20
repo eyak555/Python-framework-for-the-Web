@@ -11,7 +11,7 @@ class VehiculeAdmin(admin.ModelAdmin):
             'fields': ('immatriculation', 'type_vehicule', 'capacite', 'description')
         }),
         ('statut et rattachement', {
-            'fields': ('disponibilite', 'status', 'Entreprise', 'Offre')
+            'fields': ('disponibilite', 'Entreprise')
         }),
 
         ('horodatage', {

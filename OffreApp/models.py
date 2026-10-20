@@ -3,7 +3,12 @@ from EntrepriseApp.models import Entreprise
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
+
+
 # Create your models here.
+
+
+
 class Offre(models.Model):
     prix = models.DecimalField(
         max_digits=10,
@@ -102,4 +107,6 @@ class Offre(models.Model):
                 expedition_id=self.expedition_id,
                 status='en_attente',
             ).exclude(pk=self.pk).update(status='refusee')
-    
+
+    def __str__(self):
+        return f"{self.Entreprise.raison_sociale}"

@@ -19,10 +19,6 @@ class Vehicule(models.Model):
         related_name='entreprises_vehicules',
         )
 
-    Offre = models.ForeignKey(
-        'OffreApp.Offre', on_delete=models.CASCADE,
-        related_name='offres_vehicules',
-        )
 
     def clean(self):
         super().clean()
@@ -35,3 +31,5 @@ class Vehicule(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.immatriculation} - {self.type_vehicule}"
