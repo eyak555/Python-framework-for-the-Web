@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import Entreprise, utilisateur
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
 @admin.register(utilisateur)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DjangoUserAdmin):
     list_display = ('user_id', 'username', 'email', 'role', 'is_active', 'is_superuser')
     readonly_fields = ('created_at', 'updated_at', 'last_login', 'date_joined')
     fieldsets = (
@@ -19,6 +20,12 @@ class UserAdmin(admin.ModelAdmin):
         ('Horodatage', {
             'fields': ('last_login', 'date_joined', 'created_at', 'updated_at'),
             'classes': ('collapse',)
+        }),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'usable_password', 'email', 'password1', 'password2', 'role')
         }),
     )
 

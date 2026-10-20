@@ -11,8 +11,8 @@ from django.utils import timezone
 def validate_email(value):
     if not value:
         raise ValidationError("L'adresse e-mail est obligatoire.")
-        if not value.endswith('@gmail.com'):
-            raise ValidationError("L'adresse e-mail doit se terminer par '@gmail.com'.")
+    if not value.endswith('@gmail.com'):
+        raise ValidationError("L'adresse e-mail doit se terminer par '@gmail.com'.")
 
 matricule_fiscale_validator = RegexValidator(
     regex=r'^\d{7}[/ -]?[A-Za-z][/ -]?[ABDNPEabdnpe][/ -]?[MPCNEmpcne][/ -]?\d{3}$', message="Le format est errone'.")

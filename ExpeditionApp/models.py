@@ -16,6 +16,7 @@ class Expedition(models.Model):
     status = models.CharField(max_length=20, 
     choices=[('en_attente', 'En attente'),
                 ('publiee', 'Publiée'),
+                ('attribuee', 'Attribuée'),
                 ('en_cours', 'En cours'),   
                 ('terminee', 'Terminée'),
                 ('annulee', 'Annulée'),     
@@ -30,7 +31,7 @@ class Expedition(models.Model):
     )
     def clean(self):
         super().clean()
-        if self.entreprise_id and self.entreprise.type_entreprise != 'Chargeur':
+        if self.entreprise_id and self.entreprise.type_entreprise != 'C': 
             raise ValidationError({"entreprise": "entreprise : une expedition ne peut etre cree que par un chargeur."})
 
 
