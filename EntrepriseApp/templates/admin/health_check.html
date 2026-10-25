@@ -1,0 +1,228 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; Contrôle d'intégrité
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" style="max-width: 1200px;">
+    <h1>Tableau de bord de contrôle d'intégrité</h1>
+    <p style="margin-bottom: 20px; color: #666;">
+        Ce tableau de bord détecte les anomalies métier et les incohérences de données causées notamment par des opérations de masse (ex. <code>.update()</code>) contournant les validations des modèles.
+    </p>
+
+    <!-- Résumé général -->
+    <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+        <div style="flex: 1; padding: 15px; border-radius: 6px; background: {% if total_anomalies == 0 %}#d4edda{% else %}#f8d7da{% endif %}; border: 1px solid {% if total_anomalies == 0 %}#c3e6cb{% else %}#f5c6cb{% endif %};">
+            <h3 style="margin: 0; color: {% if total_anomalies == 0 %}#155724{% else %}#721c24{% endif %};">
+                {% if total_anomalies == 0 %}
+                    &check; Système sain : 0 anomalie détectée
+                {% else %}
+                    &excl; Attention : {{ total_anomalies }} anomalie(s) détectée(s)
+                {% endif %}
+            </h3>
+            <small style="color: #666;">Dernière vérification : {{ now|date:"d/m/Y H:i" }}</small>
+        </div>
+    </div>
+
+    <!-- 1. Offres orphelines -->
+    <div class="module" style="margin-bottom: 25px;">
+        <h2 style="background: #417690; color: white; padding: 10px 15px; margin: 0; border-radius: 4px 4px 0 0;">
+            1. Offres orphelines ({{ offres_orphelines.count }})
+        </h2>
+        <div style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #ddd;">
+            <p style="margin: 0; font-size: 13px; color: #555;">
+                <strong>Règle protégée :</strong> Une offre en attente ou acceptée doit toujours être rattachée à une expédition valide (statut <em>publiee</em> ou <em>attribuee</em>).
+            </p>
+        </div>
+        <div style="padding: 15px;">
+            {% if offres_orphelines %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">ID Offre</th>
+                        <th style="padding: 8px;">Expédition</th>
+                        <th style="padding: 8px;">Statut Expédition</th>
+                        <th style="padding: 8px;">Transporteur</th>
+                        <th style="padding: 8px;">Prix</th>
+                        <th style="padding: 8px;">Statut Offre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offre in offres_orphelines %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px;">#{{ offre.id }}</td>
+                        <td style="padding: 8px;">{{ offre.expedition.reference }}</td>
+                        <td style="padding: 8px;"><span style="color: red; font-weight: bold;">{{ offre.expedition.status }}</span></td>
+                        <td style="padding: 8px;">{{ offre.Entreprise.raison_sociale }}</td>
+                        <td style="padding: 8px;">{{ offre.prix }} DT</td>
+                        <td style="padding: 8px;">{{ offre.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #28a745; margin: 0;">&check; Aucune offre orpheline détectée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 2. Expéditions bloquées -->
+    <div class="module" style="margin-bottom: 25px;">
+        <h2 style="background: #417690; color: white; padding: 10px 15px; margin: 0; border-radius: 4px 4px 0 0;">
+            2. Expéditions bloquées &gt; 7 jours ({{ expeditions_bloquees.count }})
+        </h2>
+        <div style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #ddd;">
+            <p style="margin: 0; font-size: 13px; color: #555;">
+                <strong>Règle protégée :</strong> Détection des expéditions publiées depuis plus d'une semaine sans avoir été attribuées.
+            </p>
+        </div>
+        <div style="padding: 15px;">
+            {% if expeditions_bloquees %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">Référence</th>
+                        <th style="padding: 8px;">Chargeur</th>
+                        <th style="padding: 8px;">Itinéraire</th>
+                        <th style="padding: 8px;">Date création</th>
+                        <th style="padding: 8px;">Date souhaitée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exp in expeditions_bloquees %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">{{ exp.reference }}</td>
+                        <td style="padding: 8px;">{{ exp.entreprise.raison_sociale }}</td>
+                        <td style="padding: 8px;">{{ exp.ville_depart }} &rarr; {{ exp.ville_arrivee }}</td>
+                        <td style="padding: 8px; color: #b71c1c;">{{ exp.created_at|date:"d/m/Y H:i" }}</td>
+                        <td style="padding: 8px;">{{ exp.date_souhaitee|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #28a745; margin: 0;">&check; Aucune expédition bloquée détectée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 3. Transporteurs sans flotte -->
+    <div class="module" style="margin-bottom: 25px;">
+        <h2 style="background: #417690; color: white; padding: 10px 15px; margin: 0; border-radius: 4px 4px 0 0;">
+            3. Transporteurs sans flotte ({{ transporteurs_sans_flotte.count }})
+        </h2>
+        <div style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #ddd;">
+            <p style="margin: 0; font-size: 13px; color: #555;">
+                <strong>Règle protégée :</strong> Tout transporteur enregistré doit disposer d'au moins un véhicule pour pouvoir opérer sur la plateforme.
+            </p>
+        </div>
+        <div style="padding: 15px;">
+            {% if transporteurs_sans_flotte %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">Raison sociale</th>
+                        <th style="padding: 8px;">Matricule fiscale</th>
+                        <th style="padding: 8px;">Gérant</th>
+                        <th style="padding: 8px;">Date d'inscription</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transporteur in transporteurs_sans_flotte %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">{{ transporteur.raison_sociale }}</td>
+                        <td style="padding: 8px;">{{ transporteur.matricule_fiscale }}</td>
+                        <td style="padding: 8px;">{{ transporteur.gerant.username }}</td>
+                        <td style="padding: 8px;">{{ transporteur.creation_date|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #28a745; margin: 0;">&check; Tous les transporteurs disposent d'au moins un véhicule.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 4. Incohérence de disponibilité -->
+    <div class="module" style="margin-bottom: 25px;">
+        <h2 style="background: #417690; color: white; padding: 10px 15px; margin: 0; border-radius: 4px 4px 0 0;">
+            4. Incohérence de disponibilité des véhicules ({{ vehicules_incoherents.count }})
+        </h2>
+        <div style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #ddd;">
+            <p style="margin: 0; font-size: 13px; color: #555;">
+                <strong>Règle protégée :</strong> Un véhicule actuellement affecté à une offre acceptée ne peut pas être simultanément marqué comme disponible (<code>disponibilite=True</code>).
+            </p>
+        </div>
+        <div style="padding: 15px;">
+            {% if vehicules_incoherents %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">Immatriculation</th>
+                        <th style="padding: 8px;">Type</th>
+                        <th style="padding: 8px;">Transporteur</th>
+                        <th style="padding: 8px;">Disponibilité déclarée</th>
+                        <th style="padding: 8px;">Problème</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicule in vehicules_incoherents %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">{{ vehicule.immatriculation }}</td>
+                        <td style="padding: 8px;">{{ vehicule.get_type_vehicule_display }}</td>
+                        <td style="padding: 8px;">{{ vehicule.Entreprise.raison_sociale }}</td>
+                        <td style="padding: 8px; color: green; font-weight: bold;">Disponible (True)</td>
+                        <td style="padding: 8px; color: red;">Affecté à une offre acceptée</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #28a745; margin: 0;">&check; Aucune incohérence de disponibilité détectée sur les véhicules.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 5. Doublons de proposition -->
+    <div class="module" style="margin-bottom: 25px;">
+        <h2 style="background: #417690; color: white; padding: 10px 15px; margin: 0; border-radius: 4px 4px 0 0;">
+            5. Doublons de proposition ({{ doublons_propositions.count }})
+        </h2>
+        <div style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #ddd;">
+            <p style="margin: 0; font-size: 13px; color: #555;">
+                <strong>Règle protégée (Règle 4) :</strong> Un transporteur ne peut pas soumettre plusieurs offres en attente pour la même expédition.
+            </p>
+        </div>
+        <div style="padding: 15px;">
+            {% if doublons_propositions %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #ddd;">
+                        <th style="padding: 8px;">Transporteur</th>
+                        <th style="padding: 8px;">Expédition</th>
+                        <th style="padding: 8px;">Nombre d'offres en attente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in doublons_propositions %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-weight: bold;">{{ item.Entreprise__raison_sociale }}</td>
+                        <td style="padding: 8px;">{{ item.expedition__reference }}</td>
+                        <td style="padding: 8px; color: red; font-weight: bold;">{{ item.nb_offres }} offres</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color: #28a745; margin: 0;">&check; Aucun doublon de proposition détecté.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
