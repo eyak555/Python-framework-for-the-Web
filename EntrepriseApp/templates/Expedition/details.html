@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'expédition</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: #f1f5f9;
+            color: #1e293b;
+            font-family: Arial, sans-serif;
+        }
+
+        .details-card {
+            width: min(700px, 100%);
+            margin: 0 auto;
+            padding: 32px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 28px;
+            color: #0f172a;
+            font-size: 28px;
+        }
+
+        .details-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 0 0 28px;
+        }
+
+        .detail {
+            padding: 16px;
+            background: #f8fafc;
+            border-left: 4px solid #ff3db2;
+            border-radius: 8px;
+        }
+
+        .detail strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #64748b;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .detail p {
+            margin: 0;
+        }
+
+        .status {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .description {
+            grid-column: 1 / -1;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 18px;
+            background: #ff3db2;
+            color: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .back-link:hover {
+            background: #d73b3b;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .details-card {
+                padding: 24px 18px;
+            }
+
+            .details-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="details-card">
+        <h1>Détails de l'expédition {{ expedition.reference }}</h1>
+
+        <section class="details-list">
+            <div class="detail">
+                <strong>Référence</strong>
+                <p>{{ expedition.reference }}</p>
+            </div>
+            <div class="detail">
+                <strong>Statut</strong>
+                <p class="status">{{ expedition.get_status_display }}</p>
+            </div>
+            <div class="detail">
+                <strong>Départ</strong>
+                <p>{{ expedition.ville_depart }}</p>
+            </div>
+            <div class="detail">
+                <strong>Arrivée</strong>
+                <p>{{ expedition.ville_arrivee }}</p>
+            </div>
+            <div class="detail">
+                <strong>Poids</strong>
+                <p>{{ expedition.poids }}</p>
+            </div>
+            <div class="detail">
+                <strong>Date souhaitée</strong>
+                <p>{{ expedition.date_souhaitee }}</p>
+            </div>
+            <div class="detail description">
+                <strong>Description</strong>
+                <p>{{ expedition.description|default:"Aucune description" }}</p>
+            </div>
+            <div class="detail description">
+                <strong>Entreprise</strong>
+                <p>{{ expedition.entreprise }}</p>
+            </div>
+        </section>
+       
+        <a class="back-link" href="{% url 'list' %}">Retour à la liste</a>
+    </main>
+</body>
+</html>

@@ -12,10 +12,7 @@ from OffreApp.models import Offre
 
 @staff_member_required
 def health_check_view(request):
-    """
-    Tableau de bord de contrôle d'intégrité (Travail individuel - Section VIII).
-    Exécute 5 contrôles d'intégrité métier via des requêtes ORM optimisées.
-    """
+    
     now = timezone.now()
     sept_jours_avant = now - datetime.timedelta(days=7)
 

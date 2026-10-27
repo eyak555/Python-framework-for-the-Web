@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Expeditions List </h1>
+    <ul>
+    {% for expedition in list %}
+        <li>
+            <a href="{% url 'details' expedition.pk %}">
+                {{ expedition.reference }}
+            </a>
+            - {{ expedition.entreprise }}
+            <a href="{% url 'delete' expedition.pk %}">Supprimer</a>
+        </li>
+
+        {% empty %}
+         No expeditions available.
+
+    {% endfor %}
+    </ul>
+
+</body>
+</html>
