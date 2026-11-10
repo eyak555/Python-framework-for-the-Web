@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if object %}Modifier{% else %}Créer{% endif %} une expédition</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            background: #eef2ff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 48px 20px;
+            background: linear-gradient(135deg, #eef2ff, #fdf2f8);
+        }
+
+        .form-card {
+            width: min(720px, 100%);
+            margin: 0 auto;
+            padding: 36px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(30, 41, 59, 0.12);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #111827;
+            font-size: 30px;
+        }
+
+        .intro {
+            margin: 0 0 28px;
+            color: #64748b;
+        }
+
+        form p {
+            margin: 0 0 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: #172033;
+            font: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+        }
+
+        .helptext {
+            display: block;
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .errorlist {
+            margin: 6px 0;
+            padding: 0;
+            color: #b91c1c;
+            font-size: 13px;
+            list-style: none;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        button,
+        .cancel-link {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 9px;
+            font: inherit;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button {
+            border: 0;
+            background: #7c3aed;
+            color: #ffffff;
+        }
+
+        button:hover {
+            background: #6d28d9;
+        }
+
+        .cancel-link {
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+
+        .cancel-link:hover {
+            background: #f8fafc;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 24px 12px;
+            }
+
+            .form-card {
+                padding: 24px 18px;
+            }
+
+            .actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            button,
+            .cancel-link {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="form-card">
+        <h1>{% if object %}Modifier l'expédition{% else %}Créer une expédition{% endif %}</h1>
+        <p class="intro">
+            {% if object %}Mettez à jour les informations de l'expédition.{% else %}Renseignez les informations de la nouvelle expédition.{% endif %}
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="actions">
+                <button type="submit">{% if object %}Enregistrer les modifications{% else %}Créer l'expédition{% endif %}</button>
+                <a class="cancel-link" href="{% url 'listclass' %}">Annuler</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

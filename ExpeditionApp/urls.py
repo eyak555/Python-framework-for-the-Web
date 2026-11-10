@@ -12,5 +12,10 @@ urlpatterns = [
     name="welcomeFunction"),
     path('list/', listExpeditions, name='list'),
     path('details/<int:pk>/', details, name='details'),
-    path('delete/<int:pk>/', delete_expedition, name='delete')
+    path('delete/<int:pk>/', delete_expedition, name='delete'),
+    path('listclass/', ListExpedition.as_view(), name='listclass'),
+    path('detailsclass/<int:pk>/', DetailExpedition.as_view(), name='detailsclass'),
+    path('deleteclass/<int:pk>/', DeleteExpedition.as_view(), name='deleteclass'),
+    path('createclass/', CreateExpedition.as_view(), name='createclass'),
+    path('updateclass/<int:pk>/', UpdateExpedition.as_view(), name='updateclass'),
 ]

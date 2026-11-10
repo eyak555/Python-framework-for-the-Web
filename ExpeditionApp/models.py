@@ -2,6 +2,7 @@ from django.db import models
 from EntrepriseApp.models import Entreprise
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
 class Expedition(models.Model):
@@ -48,7 +49,7 @@ class Expedition(models.Model):
             .last() #recupere la derniere expedition
         )
         #ajout de 1 au dernier compteur
-        compteur = (int(dernier.reference.split[-5]) + 1 if dernier 
+        compteur = (int(dernier.reference.split('_')[-1]) + 1 if dernier
         else 1 # si rien nexiste, on commence à 1
         )
         if compteur > 99999:
@@ -59,7 +60,7 @@ class Expedition(models.Model):
 
     def save(self, *args, **kwargs): # ki manarch 9adeh andi men parametre (*args, **kwargs) args : attributs, kwargs : les fonctions
         if not self.reference:
-            self.reference = self.generate_reference()
+            self.reference = self._generate_reference()
 
         #fct appele pour appliquer les validateurs
         self.full_clean() #valide les champs avant de sauvegarder
