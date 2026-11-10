@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Véhicules</title>
+</head>
+<body>
+    <main>
+        <h1>Liste des véhicules</h1>
+        <a href="{% url 'vehicule-create' %}">Ajouter un véhicule</a>
+        <ul>
+            {% for vehicule in vehicules %}
+                <li>
+                    <a href="{% url 'vehicule-detail' vehicule.pk %}">
+                        {{ vehicule.immatriculation }}
+                    </a>
+                    - {{ vehicule.get_type_vehicule_display }}
+                    <a href="{% url 'vehicule-update' vehicule.pk %}">Modifier</a>
+                    <a href="{% url 'vehicule-delete' vehicule.pk %}">Supprimer</a>
+                </li>
+            {% empty %}
+                <li>Aucun véhicule disponible.</li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

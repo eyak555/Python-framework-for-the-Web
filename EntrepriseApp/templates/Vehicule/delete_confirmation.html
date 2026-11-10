@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer le véhicule</title>
+</head>
+<body>
+    <main>
+        <h1>Confirmer la suppression</h1>
+        <p>Voulez-vous vraiment supprimer le véhicule <strong>{{ object.immatriculation }}</strong> ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Oui, supprimer</button>
+            <a href="{% url 'vehicule-list' %}">Annuler</a>
+        </form>
+    </main>
+</body>
+</html>

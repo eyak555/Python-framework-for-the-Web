@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du véhicule</title>
+</head>
+<body>
+    <main>
+        <h1>Détails du véhicule {{ vehicule.immatriculation }}</h1>
+        <p><strong>Immatriculation :</strong> {{ vehicule.immatriculation }}</p>
+        <p><strong>Type :</strong> {{ vehicule.get_type_vehicule_display }}</p>
+        <p><strong>Capacité :</strong> {{ vehicule.capacite }}</p>
+        <p><strong>Disponibilité :</strong> {% if vehicule.disponibilite %}Disponible{% else %}Indisponible{% endif %}</p>
+        <p><strong>Statut :</strong> {{ vehicule.get_status_display }}</p>
+        <p><strong>Description :</strong> {{ vehicule.description|default:"Aucune description" }}</p>
+        <p><strong>Entreprise :</strong> {{ vehicule.Entreprise }}</p>
+        <a href="{% url 'vehicule-update' vehicule.pk %}">Modifier</a>
+        <a href="{% url 'vehicule-list' %}">Retour à la liste</a>
+    </main>
+</body>
+</html>
