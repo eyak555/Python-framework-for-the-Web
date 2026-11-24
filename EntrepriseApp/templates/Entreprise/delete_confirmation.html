@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer l'entreprise</title>
+</head>
+<body>
+    <main>
+        <h1>Confirmer la suppression</h1>
+        <p>Voulez-vous vraiment supprimer l'entreprise <strong>{{ object.raison_sociale }}</strong> ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Oui, supprimer</button>
+            <a href="{% url 'entreprise-list' %}">Annuler</a>
+        </form>
+    </main>
+</body>
+</html>

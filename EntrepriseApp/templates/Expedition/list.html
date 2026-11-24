@@ -6,6 +6,25 @@
     <title>Document</title>
 </head>
 <body>
+    <nav>
+        <ul>
+        <a href="{% url 'listclass' %}">Expeditions</a>
+        <a href="{% url 'entreprise-list' %}">Entreprises</a>
+        <a href="{% url 'createclass' %}">Créer une expédition</a>
+        {% if user.is_authenticated %}
+        <li>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+        {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+        <li><a href="{% url 'register' %}">Register</a></li>
+        </ul>
+
+    </nav>
     <h1>Expeditions List </h1>
     <ul>
     {% for expedition in list %}

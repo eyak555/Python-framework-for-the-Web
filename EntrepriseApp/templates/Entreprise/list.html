@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entreprises</title>
+</head>
+<body>
+    <main>
+        <h1>Liste des entreprises</h1>
+        <a href="{% url 'entreprise-create' %}">Ajouter une entreprise</a>
+        <ul>
+            {% for entreprise in entreprises %}
+                <li>
+                    <a href="{% url 'entreprise-detail' entreprise.pk %}">
+                        {{ entreprise.raison_sociale }}
+                    </a>
+                    - {{ entreprise.get_type_entreprise_display }}
+                    <a href="{% url 'entreprise-update' entreprise.pk %}">Modifier</a>
+                    <a href="{% url 'entreprise-delete' entreprise.pk %}">Supprimer</a>
+                </li>
+            {% empty %}
+                <li>Aucune entreprise disponible.</li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

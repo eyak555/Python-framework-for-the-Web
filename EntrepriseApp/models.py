@@ -71,7 +71,7 @@ class Entreprise(models.Model):
     choices=[
         ('C', 'Chargeur'),
         ('T', 'Transporteur'),
-        ('A', 'Autre'),
+        
     ])
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)

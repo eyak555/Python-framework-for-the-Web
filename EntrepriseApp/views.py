@@ -3,11 +3,49 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from EntrepriseApp.models import Entreprise
 from VehiculeApp.models import Vehicule
 from ExpeditionApp.models import Expedition
 from OffreApp.models import Offre
+
+from .forms import RegisterForm
+from django.shortcuts import redirect
+from .forms import EntrepriseForm
+
+
+class ListEntreprise(ListView):
+    model = Entreprise
+    template_name = 'Entreprise/list.html'
+    context_object_name = 'entreprises'
+
+
+class DetailEntreprise(DetailView):
+    model = Entreprise
+    template_name = 'Entreprise/details.html'
+    context_object_name = 'entreprise'
+
+
+class CreateEntreprise(CreateView):
+    model = Entreprise
+    template_name = 'Entreprise/forms.html'
+    form_class = EntrepriseForm
+    success_url = reverse_lazy('entreprise-list')
+
+
+class UpdateEntreprise(UpdateView):
+    model = Entreprise
+    template_name = 'Entreprise/forms.html'
+    form_class = EntrepriseForm
+    success_url = reverse_lazy('entreprise-list')
+
+
+class DeleteEntreprise(DeleteView):
+    model = Entreprise
+    template_name = 'Entreprise/delete_confirmation.html'
+    success_url = reverse_lazy('entreprise-list')
 
 
 @staff_member_required
@@ -76,3 +114,14 @@ def health_check_view(request):
     }
 
     return render(request, 'admin/health_check.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirige vers la page de connexion après l'inscription réussie
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})

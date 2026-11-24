@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from .models import Expedition
 from .forms import ExpeditionForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def home (request):
@@ -51,7 +52,7 @@ class CreateExpedition(CreateView):
     form_class=ExpeditionForm
     success_url=reverse_lazy('listclass')
 
-class UpdateExpedition(UpdateView):
+class UpdateExpedition(LoginRequiredMixin, UpdateView):
     model = Expedition
     template_name = 'Expedition/forms.html'
     form_class = ExpeditionForm
