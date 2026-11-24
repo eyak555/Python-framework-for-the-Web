@@ -8,6 +8,11 @@
 </div>
 {% endblock %}
 
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'EntrepriseApp/css/site.css' %}">
+{% endblock %}
+
 {% block content %}
 <div id="content-main" style="max-width: 1200px;">
     <h1>Tableau de bord de contrôle d'intégrité</h1>

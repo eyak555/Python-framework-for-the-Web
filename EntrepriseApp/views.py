@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Count
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
@@ -11,9 +14,10 @@ from VehiculeApp.models import Vehicule
 from ExpeditionApp.models import Expedition
 from OffreApp.models import Offre
 
-from .forms import RegisterForm
 from django.shortcuts import redirect
-from .forms import EntrepriseForm
+from django.views.decorators.http import require_http_methods
+
+from .forms import EntrepriseForm, ProfileForm, RegisterForm
 
 
 class ListEntreprise(ListView):
@@ -28,24 +32,50 @@ class DetailEntreprise(DetailView):
     context_object_name = 'entreprise'
 
 
-class CreateEntreprise(CreateView):
+class CreateEntreprise(LoginRequiredMixin, CreateView):
     model = Entreprise
     template_name = 'Entreprise/forms.html'
     form_class = EntrepriseForm
     success_url = reverse_lazy('entreprise-list')
 
 
-class UpdateEntreprise(UpdateView):
+class UpdateEntreprise(LoginRequiredMixin, UpdateView):
     model = Entreprise
     template_name = 'Entreprise/forms.html'
     form_class = EntrepriseForm
     success_url = reverse_lazy('entreprise-list')
 
 
-class DeleteEntreprise(DeleteView):
+class DeleteEntreprise(LoginRequiredMixin, DeleteView):
     model = Entreprise
     template_name = 'Entreprise/delete_confirmation.html'
     success_url = reverse_lazy('entreprise-list')
+
+
+@login_required
+def profile(request):
+    return render(request, 'profile/details.html', {'profile_user': request.user})
+
+
+@login_required
+def profile_edit(request):
+    form = ProfileForm(request.POST or None, instance=request.user)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('profile')
+
+    return render(request, 'profile/forms.html', {'form': form})
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def profile_delete(request):
+    if request.method == 'POST':
+        request.user.delete()
+        logout(request)
+        return redirect('project-home')
+
+    return render(request, 'profile/delete_confirmation.html')
 
 
 @staff_member_required

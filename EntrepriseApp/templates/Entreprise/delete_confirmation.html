@@ -1,19 +1,17 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supprimer l'entreprise</title>
-</head>
-<body>
-    <main>
-        <h1>Confirmer la suppression</h1>
-        <p>Voulez-vous vraiment supprimer l'entreprise <strong>{{ object.raison_sociale }}</strong> ?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit">Oui, supprimer</button>
-            <a href="{% url 'entreprise-list' %}">Annuler</a>
-        </form>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Supprimer une entreprise | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Action irréversible</p>
+    <h1>Supprimer cette entreprise ?</h1>
+    <p class="page-intro">Vous êtes sur le point de supprimer <strong>{{ object.raison_sociale }}</strong>.</p>
+    <p class="notice">Cette suppression peut également supprimer les données liées à cette entreprise.</p>
+    <form class="button-row" method="post">
+        {% csrf_token %}
+        <button class="button-danger" type="submit">Oui, supprimer</button>
+        <a class="button-secondary" href="{% url 'entreprise-list' %}">Annuler</a>
+    </form>
+</section>
+{% endblock %}

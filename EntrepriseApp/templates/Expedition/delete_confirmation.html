@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmer la suppression</title>
-</head>
-<body>
-    <h1>Confirmer la suppression</h1>
+{% extends "base.html" %}
 
-    <p>
-        Voulez-vous vraiment supprimer l'expédition
+{% block title %}Supprimer une expédition | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Action irréversible</p>
+    <h1>Supprimer cette expédition ?</h1>
+    <p class="page-intro">
+        Confirmez-vous la suppression de l’expédition
         <strong>{{ expedition.reference }}</strong> ?
     </p>
-
-    <form method="post">
+    <form class="button-row" method="post">
         {% csrf_token %}
-        <button type="submit">Oui, supprimer</button>
-        <a href="{% url 'list' %}">Annuler</a>
+        <button class="button-danger" type="submit">Oui, supprimer</button>
+        <a class="button-secondary" href="{% url 'listclass' %}">Annuler</a>
     </form>
-</body>
-</html>
+</section>
+{% endblock %}

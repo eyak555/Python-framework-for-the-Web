@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Offre pour {{ offre.expedition.reference }} | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">Proposition de transport</p>
+            <h1>Offre pour {{ offre.expedition.reference }}</h1>
+            <p class="page-intro">{{ offre.Entreprise.raison_sociale }} · {{ offre.Vehicule.immatriculation }}</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'offre-update' offre.pk %}">Modifier l’offre</a>
+        {% endif %}
+    </header>
+
+    <dl class="detail-grid">
+        <div class="detail-item">
+            <dt class="detail-label">Prix</dt>
+            <dd class="detail-value">{{ offre.prix }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Délai</dt>
+            <dd class="detail-value">{{ offre.delai_jours }} jour(s)</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Statut</dt>
+            <dd class="detail-value"><span class="status-pill">{{ offre.get_status_display }}</span></dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Expédition</dt>
+            <dd class="detail-value">{{ offre.expedition.reference }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Entreprise</dt>
+            <dd class="detail-value">{{ offre.Entreprise.raison_sociale }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Véhicule</dt>
+            <dd class="detail-value">{{ offre.Vehicule.immatriculation }}</dd>
+        </div>
+    </dl>
+
+    <a class="button-secondary" href="{% url 'offre-list' %}">Retour aux offres</a>
+</section>
+{% endblock %}

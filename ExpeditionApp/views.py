@@ -5,6 +5,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from .models import Expedition
 from .forms import ExpeditionForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home (request):
@@ -22,6 +23,7 @@ def details(request, pk):
     return render(request, 'expedition/details.html', {'expedition': expedition})
 
 
+@login_required
 def delete_expedition(request, pk):
     expedition = get_object_or_404(Expedition, pk=pk)
     if request.method == 'POST':
@@ -41,12 +43,13 @@ class DetailExpedition(DetailView):
     template_name='Expedition/details.html'
     context_object_name='expedition'
 
-class DeleteExpedition(DeleteView):
+class DeleteExpedition(LoginRequiredMixin, DeleteView):
     model=Expedition
     template_name='Expedition/delete_confirmation.html'
+    context_object_name='expedition'
     success_url=reverse_lazy('listclass')
 
-class CreateExpedition(CreateView):
+class CreateExpedition(LoginRequiredMixin, CreateView):
     model=Expedition
     template_name='Expedition/forms.html'
     form_class=ExpeditionForm

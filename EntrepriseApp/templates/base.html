@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10233f">
+    <title>{% block title %}TransConnect{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'EntrepriseApp/css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="app-body">
+    <div class="app-shell">
+        {% include "shared/auth_nav.html" %}
+        <main class="page-shell">
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="site-footer">
+            TransConnect <span>·</span> Plateforme de transport et de logistique
+        </footer>
+    </div>
+</body>
+</html>

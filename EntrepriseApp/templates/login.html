@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form method="post">
+{% extends "base.html" %}
+
+{% block title %}Connexion | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card auth-card">
+    <p class="eyebrow">Bon retour</p>
+    <h1>Connexion</h1>
+    <p class="page-intro">Connectez-vous pour accéder à votre espace TransConnect.</p>
+
+    <form class="app-form" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Login</button>
+        <div class="button-row">
+            <button class="button" type="submit">Se connecter</button>
+            <a class="button-secondary" href="{% url 'register' %}">Créer un compte</a>
+        </div>
     </form>
-</body>
-</html>
+</section>
+{% endblock %}

@@ -17,15 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
-from EntrepriseApp.views import register
+from django.views.generic import TemplateView
+from EntrepriseApp.views import profile, profile_delete, profile_edit, register
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='home.html'), name='project-home'),
     path('admin/', admin.site.urls),
     path('entreprise/', include('EntrepriseApp.urls')),
     path('expedition/', include('ExpeditionApp.urls')),
     path('vehicule/', include('VehiculeApp.urls')),
+    path('offre/', include('OffreApp.urls')),
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', register, name='register'),
+    path('profile/', profile, name='profile'),
+    path('profile/edit/', profile_edit, name='profile-edit'),
+    path('profile/delete/', profile_delete, name='profile-delete'),
 ]
 

@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supprimer le véhicule</title>
-</head>
-<body>
-    <main>
-        <h1>Confirmer la suppression</h1>
-        <p>Voulez-vous vraiment supprimer le véhicule <strong>{{ object.immatriculation }}</strong> ?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit">Oui, supprimer</button>
-            <a href="{% url 'vehicule-list' %}">Annuler</a>
-        </form>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Supprimer un véhicule | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Action irréversible</p>
+    <h1>Supprimer ce véhicule ?</h1>
+    <p class="page-intro">Confirmez-vous la suppression du véhicule <strong>{{ object.immatriculation }}</strong> ?</p>
+    <form class="button-row" method="post">
+        {% csrf_token %}
+        <button class="button-danger" type="submit">Oui, supprimer</button>
+        <a class="button-secondary" href="{% url 'vehicule-list' %}">Annuler</a>
+    </form>
+</section>
+{% endblock %}

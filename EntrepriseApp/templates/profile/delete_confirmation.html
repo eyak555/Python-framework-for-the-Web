@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer mon compte | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Gestion du compte</p>
+    <h1>Supprimer mon compte ?</h1>
+    <p class="page-intro">
+        Cette action est définitive. Votre compte, votre entreprise, vos véhicules,
+        vos expéditions et vos offres seront supprimés. Les offres d’autres transporteurs
+        liées à vos expéditions seront également supprimées.
+    </p>
+    <form class="button-row" method="post">
+        {% csrf_token %}
+        <button class="button-danger" type="submit">Supprimer définitivement mon compte</button>
+        <a class="button-secondary" href="{% url 'profile' %}">Annuler</a>
+    </form>
+</section>
+{% endblock %}

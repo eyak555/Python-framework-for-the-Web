@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer une offre | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Action irréversible</p>
+    <h1>Supprimer cette offre ?</h1>
+    <p class="page-intro">
+        Confirmez-vous la suppression de l’offre pour
+        <strong>{{ object.expedition.reference }}</strong> ?
+    </p>
+    <form class="button-row" method="post">
+        {% csrf_token %}
+        <button class="button-danger" type="submit">Oui, supprimer</button>
+        <a class="button-secondary" href="{% url 'offre-list' %}">Annuler</a>
+    </form>
+</section>
+{% endblock %}

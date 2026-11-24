@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import VehiculeForm
@@ -17,21 +18,21 @@ class DetailVehicule(DetailView):
     context_object_name = 'vehicule'
 
 
-class CreateVehicule(CreateView):
+class CreateVehicule(LoginRequiredMixin, CreateView):
     model = Vehicule
     template_name = 'Vehicule/forms.html'
     form_class = VehiculeForm
     success_url = reverse_lazy('vehicule-list')
 
 
-class UpdateVehicule(UpdateView):
+class UpdateVehicule(LoginRequiredMixin, UpdateView):
     model = Vehicule
     template_name = 'Vehicule/forms.html'
     form_class = VehiculeForm
     success_url = reverse_lazy('vehicule-list')
 
 
-class DeleteVehicule(DeleteView):
+class DeleteVehicule(LoginRequiredMixin, DeleteView):
     model = Vehicule
     template_name = 'Vehicule/delete_confirmation.html'
     success_url = reverse_lazy('vehicule-list')

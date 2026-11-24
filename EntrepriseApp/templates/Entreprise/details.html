@@ -1,19 +1,39 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de l'entreprise</title>
-</head>
-<body>
-    <main>
-        <h1>{{ entreprise.raison_sociale }}</h1>
-        <p><strong>Matricule fiscal :</strong> {{ entreprise.matricule_fiscale }}</p>
-        <p><strong>Adresse :</strong> {{ entreprise.adresse }}</p>
-        <p><strong>Type :</strong> {{ entreprise.get_type_entreprise_display }}</p>
-        <p><strong>Gérant :</strong> {{ entreprise.gerant }}</p>
-        <a href="{% url 'entreprise-update' entreprise.pk %}">Modifier</a>
-        <a href="{% url 'entreprise-list' %}">Retour à la liste</a>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ entreprise.raison_sociale }} | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">Fiche entreprise</p>
+            <h1>{{ entreprise.raison_sociale }}</h1>
+            <p class="page-intro">Informations et coordonnées de l’entreprise.</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'entreprise-update' entreprise.pk %}">Modifier la fiche</a>
+        {% endif %}
+    </header>
+
+    <dl class="detail-grid">
+        <div class="detail-item">
+            <dt class="detail-label">Matricule fiscal</dt>
+            <dd class="detail-value">{{ entreprise.matricule_fiscale }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Type d’entreprise</dt>
+            <dd class="detail-value"><span class="status-pill">{{ entreprise.get_type_entreprise_display }}</span></dd>
+        </div>
+        <div class="detail-item detail-item--wide">
+            <dt class="detail-label">Adresse</dt>
+            <dd class="detail-value">{{ entreprise.adresse }}</dd>
+        </div>
+        <div class="detail-item detail-item--wide">
+            <dt class="detail-label">Gérant</dt>
+            <dd class="detail-value">{{ entreprise.gerant }}</dd>
+        </div>
+    </dl>
+
+    <a class="button-secondary" href="{% url 'entreprise-list' %}">Retour aux entreprises</a>
+</section>
+{% endblock %}

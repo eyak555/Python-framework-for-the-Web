@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Modifier{% else %}Créer{% endif %} une offre | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Propositions de transport</p>
+    <h1>{% if object %}Modifier l’offre{% else %}Nouvelle offre{% endif %}</h1>
+    <p class="page-intro">
+        {% if object %}Mettez à jour les informations de cette offre.{% else %}Renseignez le prix, le délai et les ressources pour proposer un transport.{% endif %}
+    </p>
+
+    <form class="app-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="button-row">
+            <button class="button" type="submit">Enregistrer</button>
+            <a class="button-secondary" href="{% url 'offre-list' %}">Annuler</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

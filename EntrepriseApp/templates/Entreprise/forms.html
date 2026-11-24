@@ -1,19 +1,22 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if object %}Modifier{% else %}Créer{% endif %} une entreprise</title>
-</head>
-<body>
-    <main>
-        <h1>{% if object %}Modifier{% else %}Créer{% endif %} une entreprise</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Enregistrer</button>
-            <a href="{% url 'entreprise-list' %}">Annuler</a>
-        </form>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Modifier{% else %}Créer{% endif %} une entreprise | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Gestion des entreprises</p>
+    <h1>{% if object %}Modifier l’entreprise{% else %}Nouvelle entreprise{% endif %}</h1>
+    <p class="page-intro">
+        {% if object %}Mettez à jour les informations de l’entreprise.{% else %}Renseignez les informations de l’entreprise à ajouter.{% endif %}
+    </p>
+
+    <form class="app-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="button-row">
+            <button class="button" type="submit">Enregistrer</button>
+            <a class="button-secondary" href="{% url 'entreprise-list' %}">Annuler</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

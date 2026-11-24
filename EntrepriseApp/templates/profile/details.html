@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Mon profil | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">Mon espace</p>
+            <h1>Mon profil</h1>
+            <p class="page-intro">Consultez et gérez les informations de votre compte.</p>
+        </div>
+        <a class="button" href="{% url 'profile-edit' %}">Modifier</a>
+    </header>
+
+    <dl class="detail-grid">
+        <div class="detail-item">
+            <dt class="detail-label">Nom d’utilisateur</dt>
+            <dd class="detail-value">{{ profile_user.username }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Rôle</dt>
+            <dd class="detail-value"><span class="status-pill">{{ profile_user.get_role_display }}</span></dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Prénom</dt>
+            <dd class="detail-value">{{ profile_user.first_name|default:"Non renseigné" }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Nom</dt>
+            <dd class="detail-value">{{ profile_user.last_name|default:"Non renseigné" }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Adresse e-mail</dt>
+            <dd class="detail-value">{{ profile_user.email }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Téléphone</dt>
+            <dd class="detail-value">{{ profile_user.telephone|default:"Non renseigné" }}</dd>
+        </div>
+    </dl>
+
+    <a class="text-link" href="{% url 'profile-delete' %}">Supprimer mon compte</a>
+</section>
+{% endblock %}

@@ -1,47 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <nav>
-        <ul>
-        <a href="{% url 'listclass' %}">Expeditions</a>
-        <a href="{% url 'entreprise-list' %}">Entreprises</a>
-        <a href="{% url 'createclass' %}">Créer une expédition</a>
+{% extends "base.html" %}
+
+{% block title %}Expéditions | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">Transport et logistique</p>
+            <h1>Expéditions</h1>
+            <p class="page-intro">Suivez les demandes de transport et leurs destinations.</p>
+        </div>
         {% if user.is_authenticated %}
-        <li>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        </li>
-        {% else %}
-        <li><a href="{% url 'login' %}">Login</a></li>
+            <a class="button" href="{% url 'createclass' %}">Créer une expédition</a>
         {% endif %}
-        <li><a href="{% url 'register' %}">Register</a></li>
-        </ul>
+    </header>
 
-    </nav>
-    <h1>Expeditions List </h1>
-    <ul>
-    {% for expedition in list %}
-        <li>
-            <a href="{% url 'details' expedition.pk %}">
-                {{ expedition.reference }}
-            </a>
-            - {{ expedition.entreprise }}
-            <a href="{% url 'updateclass' expedition.pk %}">Modifier</a>
-            <a href="{% url 'delete' expedition.pk %}">Supprimer</a>
-        </li>
-
+    <ul class="record-list">
+        {% for expedition in list %}
+            <li class="record-item">
+                <div>
+                    <h2 class="record-title">
+                        <a href="{% url 'details' expedition.pk %}">{{ expedition.reference }}</a>
+                    </h2>
+                    <p class="record-meta">
+                        {{ expedition.ville_depart }} → {{ expedition.ville_arrivee }}
+                        · {{ expedition.get_status_display }}
+                    </p>
+                </div>
+                {% if user.is_authenticated %}
+                    <div class="record-actions">
+                        <a class="text-link" href="{% url 'updateclass' expedition.pk %}">Modifier</a>
+                        <a class="text-link" href="{% url 'delete' expedition.pk %}">Supprimer</a>
+                    </div>
+                {% endif %}
+            </li>
         {% empty %}
-         No expeditions available.
-
-    {% endfor %}
+            <li class="empty-state">Aucune expédition disponible pour le moment.</li>
+        {% endfor %}
     </ul>
-
-</body>
-</html>
+</section>
+{% endblock %}

@@ -1,22 +1,45 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails du véhicule</title>
-</head>
-<body>
-    <main>
-        <h1>Détails du véhicule {{ vehicule.immatriculation }}</h1>
-        <p><strong>Immatriculation :</strong> {{ vehicule.immatriculation }}</p>
-        <p><strong>Type :</strong> {{ vehicule.get_type_vehicule_display }}</p>
-        <p><strong>Capacité :</strong> {{ vehicule.capacite }}</p>
-        <p><strong>Disponibilité :</strong> {% if vehicule.disponibilite %}Disponible{% else %}Indisponible{% endif %}</p>
-        <p><strong>Statut :</strong> {{ vehicule.get_status_display }}</p>
-        <p><strong>Description :</strong> {{ vehicule.description|default:"Aucune description" }}</p>
-        <p><strong>Entreprise :</strong> {{ vehicule.Entreprise }}</p>
-        <a href="{% url 'vehicule-update' vehicule.pk %}">Modifier</a>
-        <a href="{% url 'vehicule-list' %}">Retour à la liste</a>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ vehicule.immatriculation }} | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <header class="page-heading">
+        <div>
+            <p class="eyebrow">Fiche véhicule</p>
+            <h1>{{ vehicule.immatriculation }}</h1>
+            <p class="page-intro">{{ vehicule.get_type_vehicule_display }} · {{ vehicule.Entreprise }}</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'vehicule-update' vehicule.pk %}">Modifier le véhicule</a>
+        {% endif %}
+    </header>
+
+    <dl class="detail-grid">
+        <div class="detail-item">
+            <dt class="detail-label">Capacité</dt>
+            <dd class="detail-value">{{ vehicule.capacite }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Disponibilité</dt>
+            <dd class="detail-value">
+                <span class="status-pill">{% if vehicule.disponibilite %}Disponible{% else %}Indisponible{% endif %}</span>
+            </dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Statut</dt>
+            <dd class="detail-value">{{ vehicule.get_status_display }}</dd>
+        </div>
+        <div class="detail-item">
+            <dt class="detail-label">Entreprise</dt>
+            <dd class="detail-value">{{ vehicule.Entreprise }}</dd>
+        </div>
+        <div class="detail-item detail-item--wide">
+            <dt class="detail-label">Description</dt>
+            <dd class="detail-value">{{ vehicule.description|default:"Aucune description" }}</dd>
+        </div>
+    </dl>
+
+    <a class="button-secondary" href="{% url 'vehicule-list' %}">Retour aux véhicules</a>
+</section>
+{% endblock %}

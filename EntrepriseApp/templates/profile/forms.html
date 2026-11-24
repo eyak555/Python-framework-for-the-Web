@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier mon profil | TransConnect{% endblock %}
+
+{% block content %}
+<section class="page-card page-card--narrow">
+    <p class="eyebrow">Mon espace</p>
+    <h1>Modifier mon profil</h1>
+    <p class="page-intro">Mettez à jour vos informations personnelles.</p>
+
+    <form class="app-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="button-row">
+            <button class="button" type="submit">Enregistrer</button>
+            <a class="button-secondary" href="{% url 'profile' %}">Annuler</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
